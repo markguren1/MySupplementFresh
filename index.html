@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MySupplement</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/marked@4.0.12/marked.min.js"></script>
+  <style>
+    .sort-icon::after {
+      content: '↕';
+      margin-left: 4px;
+    }
+    .table-container {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .markdown-content h1 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .markdown-content h2 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .markdown-content p {
+      margin-bottom: 1rem;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    .markdown-content th, .markdown-content td {
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+      text-align: left;
+    }
+    .markdown-content th {
+      background-color: #f3f4f6;
+    }
+    .navbar-item {
+      position: relative;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      color: #ffffff !important;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .navbar-item:hover::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #ffffff;
+    }
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .navbar-list {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: nowrap;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <nav class="bg-gradient-to-r from-blue-500 to-green-500 p-4">
+    <div class="navbar-container">
+      <h1 class="text-white text-xl font-bold">MySupplement</h1>
+      <ul class="navbar-list">
+        <li><a href="#home" class="navbar-item">Home</a></li>
+        <li><a href="#search" class="navbar-item">Search</a></li>
+        <li><a href="#compare" class="navbar-item">Compare</a></li>
+        <li><a href="#features" class="navbar-item">Features</a></li>
+        <li><a href="#resources" class="navbar-item">Resources</a></li>
+        <li><a href="#disclaimer" class="navbar-item">Disclaimer</a></li>
+        <li><a href="#cheat-sheet" class="navbar-item">Cheat Sheet</a></li>
+        <li><a href="#blog" class="navbar-item">Supplement Spotlight</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div id="root" class="container mx-auto p-4"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const supplements = [
+      {Category:"Sleep",Supplement:"Melatonin",Uses:"Insomnia/Jet Lag",Benefits:"Regulates sleep cycle",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Best for short-term use"},
+      {Category:"Sleep",Supplement:"Magnesium",Uses:"Sleep/Muscle Relax",Benefits:"Improves sleep quality",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Glycinate form preferred"},
+      {Category:"Sleep",Supplement:"Valerian Root",Uses:"Sleep onset",Benefits:"Helps fall asleep faster",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"May cause grogginess"},
+      {Category:"Sleep",Supplement:"L-Theanine",Uses:"Relaxation/Sleep",Benefits:"Calms without sedation",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Often paired with caffeine"},
+      {Category:"Sleep",Supplement:"CBD",Uses:"Sleep/Anxiety",Benefits:"Aids sleep in anxiety cases",Effectiveness:"🔴 Low",Clinical:"🔴 Low",Safety:"🟡 Medium",Tips:"Long-term safety unclear"},
+      {Category:"Anxiety/Stress",Supplement:"Ashwagandha",Uses:"Stress/Cortisol",Benefits:"Reduces stress response",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"May lower blood pressure"},
+      {Category:"Anxiety/Stress",Supplement:"Rhodiola Rosea",Uses:"Burnout/Fatigue",Benefits:"Supports resilience",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Best for short-term use"},
+      {Category:"Anxiety/Stress",Supplement:"L-Theanine",Uses:"Anxiety/Calmness",Benefits:"Promotes relaxation",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Safe and well-tolerated"},
+      {Category:"Anxiety/Stress",Supplement:"GABA",Uses:"Calmness",Benefits:"Reduces anxious thoughts",Effectiveness:"🔴 Low",Clinical:"🔴 Low",Safety:"🟢 High",Tips:"Oral absorption is poor"},
+      {Category:"Joint/Mobility",Supplement:"Glucosamine",Uses:"Arthritis/Joint pain",Benefits:"Reduces pain over time",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Often with chondroitin"},
+      {Category:"Joint/Mobility",Supplement:"Turmeric/Curcumin",Uses:"Inflammation/Pain",Benefits:"Anti-inflammatory",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Take with fat for absorption"},
+      {Category:"Joint/Mobility",Supplement:"Boswellia",Uses:"Arthritis/Inflammation",Benefits:"Reduces joint swelling",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"May affect liver enzymes"},
+      {Category:"Energy/Fatigue",Supplement:"Caffeine",Uses:"Alertness/Fatigue",Benefits:"Boosts energy short-term",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟡 Medium",Tips:"Can disrupt sleep or raise BP"},
+      {Category:"Energy/Fatigue",Supplement:"CoQ10",Uses:"Fatigue/Statin use",Benefits:"Supports mitochondrial function",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Often used with statins"},
+      {Category:"Energy/Fatigue",Supplement:"B12",Uses:"Fatigue/Deficiency",Benefits:"Boosts energy if deficient",Effectiveness:"🟢 High",Clinical:"�xt1b[32m🟢 High",Safety:"🟢 High",Tips:"Ineffective if B12 normal"},
+      {Category:"Focus/Memory",Supplement:"Bacopa Monnieri",Uses:"Memory/Cognitive load",Benefits:"Improves memory retention",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Takes 4–6 weeks for effect"},
+      {Category:"Focus/Memory",Supplement:"Citicoline",Uses:"Cognitive support",Benefits:"Supports focus/brain function",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Studied in stroke patients"},
+      {Category:"Focus/Memory",Supplement:"Ginkgo Biloba",Uses:"Memory/Circulation",Benefits:"Improves brain blood flow",Effectiveness:"🔴 Low",Clinical:"🔴 Low",Safety:"🟡 Medium",Tips:"Interacts with blood thinners"},
+      {Category:"Gut Health",Supplement:"Probiotics",Uses:"Digestion/IBS",Benefits:"Improves gut flora",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Choose strain-specific types"},
+      {Category:"Gut Health",Supplement:"Prebiotics",Uses:"Gut flora support",Benefits:"Feeds beneficial bacteria",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"In fiber-rich foods"},
+      {Category:"Gut Health",Supplement:"Digestive Enzymes",Uses:"Bloating/Indigestion",Benefits:"Breaks down food",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Useful if enzyme deficient"},
+      {Category:"Gut Health",Supplement:"L-Glutamine",Uses:"Gut lining/IBS",Benefits:"Aids intestinal repair",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Common in gut protocols"},
+      {Category:"Immunity",Supplement:"Vitamin C",Uses:"Colds/Immunity",Benefits:"Antioxidant/immune support",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Best from food sources"},
+      {Category:"Immunity",Supplement:"Zinc",Uses:"Colds/Immunity",Benefits:"Supports immune cells",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Excess can cause nausea"},
+      {Category:"Immunity",Supplement:"Elderberry",Uses:"Cold/Flu symptoms",Benefits:"Reduces cold duration",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Best taken early"},
+      {Category:"Immunity",Supplement:"Vitamin D",Uses:"Respiratory immunity",Benefits:"Modulates immune response",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Deficiency common in winter"},
+      {Category:"Brain Health",Supplement:"Omega-3 (DHA/EPA)",Uses:"Cognition/Brain aging",Benefits:"Supports brain cell health",Effectiveness:"🟢 High",Clinical:"�xt1b[32m🟢 High",Safety:"🟢 High",Tips:"Best from fish oil/algae"},
+      {Category:"Brain Health",Supplement:"Phosphatidylserine",Uses:"Memory/Focus",Benefits:"Improves cognitive function",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Well tolerated, aging support"},
+      {Category:"Brain Health",Supplement:"Lion’s Mane",Uses:"Neurogenesis/Focus",Benefits:"Promotes nerve growth",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Popular in nootropic stacks"},
+      {Category:"Heart Health",Supplement:"Omega-3",Uses:"Cholesterol/Triglycerides",Benefits:"Reduces inflammation/fats",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Look for EPA + DHA combo"},
+      {Category:"Heart Health",Supplement:"Magnesium",Uses:"Blood pressure",Benefits:"Supports vascular function",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Citrate/glycinate best"},
+      {Category:"Heart Health",Supplement:"Garlic Extract",Uses:"Cholesterol/BP",Benefits:"Lowers BP slightly",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Odorless options available"},
+      {Category:"Weight & Metabolism",Supplement:"Green Tea Extract",Uses:"Fat oxidation",Benefits:"Aids weight loss slightly",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"EGCG is active component"},
+      {Category:"Weight & Metabolism",Supplement:"Berberine",Uses:"Blood sugar/Fat metabolism",Benefits:"Improves insulin sensitivity",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟡 Medium",Tips:"Can interact with meds"},
+      {Category:"Weight & Metabolism",Supplement:"Fiber (Psyllium)",Uses:"Satiety/Glucose control",Benefits:"Supports fullness",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Drink plenty of water"},
+      {Category:"Anti-Aging & Longevity",Supplement:"NMN",Uses:"Cellular aging",Benefits:"Supports NAD+ production",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Human evidence emerging"},
+      {Category:"Anti-Aging & Longevity",Supplement:"Resveratrol",Uses:"Oxidative stress",Benefits:"Mimics calorie restriction",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Found in red wine/grapes"},
+      {Category:"Anti-Aging & Longevity",Supplement:"Curcumin",Uses:"Inflammation/Aging",Benefits:"Reduces chronic inflammation",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Best with piperine"},
+      {Category:"Men’s Health",Supplement:"Saw Palmetto",Uses:"Prostate health",Benefits:"Reduces BPH symptoms",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Best for mild BPH"},
+      {Category:"Men’s Health",Supplement:"Zinc",Uses:"Testosterone/Fertility",Benefits:"Supports hormone balance",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Don’t exceed upper limit"},
+      {Category:"Men’s Health",Supplement:"Maca Root",Uses:"Libido/Mood",Benefits:"Improves energy/libido",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Evidence is mixed"},
+      {Category:"Women’s Health",Supplement:"Iron",Uses:"Anemia/Fatigue",Benefits:"Supports oxygen transport",Effectiveness:"🟢 High",Clinical:"�xt1b[32m🟢 High",Safety:"🟡 Medium",Tips:"Monitor levels before use"},
+      {Category:"Women’s Health",Supplement:"Calcium",Uses:"Bone health",Benefits:"Prevents bone loss",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Split doses for absorption"},
+      {Category:"Women’s Health",Supplement:"Black Cohosh",Uses:"Menopause symptoms",Benefits:"Reduces hot flashes",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Use short term only"},
+      {Category:"Skin & Hair",Supplement:"Collagen Peptides",Uses:"Skin/Hair/Nails",Benefits:"Supports skin elasticity",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Hydrolyzed form is best"},
+      {Category:"Skin & Hair",Supplement:"Biotin",Uses:"Hair/Nails",Benefits:"Supports keratin production",Effectiveness:"🔴 Low",Clinical:"🔴 Low",Safety:"🟢 High",Tips:"Only useful if deficient"},
+      {Category:"Skin & Hair",Supplement:"Hyaluronic Acid",Uses:"Skin hydration",Benefits:"Improves skin moisture",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Often with collagen"},
+      {Category:"Mood & Mental Wellness",Supplement:"5-HTP",Uses:"Low mood/Sleep",Benefits:"Precursor to serotonin",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Don’t combine with SSRIs"},
+      {Category:"Mood & Mental Wellness",Supplement:"SAM-e",Uses:"Depression/Mood",Benefits:"Supports neurotransmitter balance",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Take on empty stomach"},
+      {Category:"Mood & Mental Wellness",Supplement:"St. John’s Wort",Uses:"Mild depression",Benefits:"Comparable to SSRI",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🔴 Low",Tips:"Major med interactions"},
+      {Category:"Hormonal Health",Supplement:"Inositol",Uses:"PCOS/Mood",Benefits:"Improves insulin/mood",Effectiveness:"🟢 High",Clinical:"�xt1b[32m🟢 High",Safety:"🟢 High",Tips:"Best for PCOS/fertility"},
+      {Category:"Hormonal Health",Supplement:"DHEA",Uses:"Hormone balance/Libido",Benefits:"Supports energy/hormones",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟡 Medium",Tips:"Consult doctor; avoid in cancer"},
+      {Category:"Liver Health/Detox",Supplement:"Milk Thistle",Uses:"Liver support",Benefits:"Protects liver cells",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Best for liver stress"},
+      {Category:"Liver Health/Detox",Supplement:"NAC",Uses:"Liver detox/Antioxidant",Benefits:"Boosts glutathione",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Supports mental health"},
+      {Category:"Muscle Building/Performance",Supplement:"Creatine Monohydrate",Uses:"Muscle strength",Benefits:"Enhances performance/recovery",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Best for resistance training"},
+      {Category:"Eye Health",Supplement:"Lutein/Zeaxanthin",Uses:"Eye health",Benefits:"Protects retina",Effectiveness:"🟢 High",Clinical:"�xt1b[32m🟢 High",Safety:"🟢 High",Tips:"Take with fat for absorption"},
+      {Category:"Blood Sugar Regulation",Supplement:"Alpha-Lipoic Acid",Uses:"Blood sugar/Neuropathy",Benefits:"Improves insulin sensitivity",Effectiveness:"🟡 Medium",Clinical:"🟡 Medium",Safety:"🟢 High",Tips:"Antioxidant; take with food"},
+      {Category:"Bone Health",Supplement:"Calcium",Uses:"Bone health",Benefits:"Prevents bone loss",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Split doses for absorption"},
+      {Category:"Bone Health",Supplement:"Vitamin D",Uses:"Bone health",Benefits:"Enhances calcium absorption",Effectiveness:"🟢 High",Clinical:"�xt1b[32m🟢 High",Safety:"🟢 High",Tips:"Deficiency common in winter"},
+      {Category:"Bone Health",Supplement:"Vitamin K2",Uses:"Bone health",Benefits:"Directs calcium to bones",Effectiveness:"🟢 High",Clinical:"🟢 High",Safety:"🟢 High",Tips:"Synergistic with Vitamin D"}
+    ];
+
+    const blogPost = `
+# Supplement Spotlight: August 2025 – Trending Supplements & Safety Tips
+
+Welcome to the first edition of *Supplement Spotlight*, your monthly guide to the most talked-about supplements, their benefits, and how to use them safely, especially with medications. As the global supplement market surges toward $745.94B by 2033, self-care is driving demand for innovative products. Let’s dive into what’s trending in 2025 and key safety considerations!
+
+## What’s In Vogue for 2025?
+Consumers are prioritizing self-care, with supplements focusing on energy, mental wellness, and immunity leading the charge. Non-pill formats like gummies (65% market share) are hot, especially among Gen Z and Millennials, while adaptogens and plant-based options gain traction. Here are five trending supplements based on recent market insights and social buzz:
+
+| Supplement         | Category            | Why It’s Trending                          | Medication Interactions                     |
+|--------------------|--------------------|--------------------------------------------|--------------------------------------------|
+| **Collagen**       | Skin & Hair, Bone Health | Boosts skin elasticity, joint health; $10.08B market in 2022, projected $23.02B by 2032. | Safe, but check with doctor if on blood thinners. |
+| **Magnesium**      | Sleep, Heart Health | Improves sleep, stress, and vascular function; endorsed by celebrities like Meghan Markle. | May interact with diuretics or antibiotics; consult doctor. |
+| **Ashwagandha**    | Anxiety/Stress      | Adaptogen for stress relief; rising in plant-based formulations. | May amplify sedatives or thyroid meds; seek medical advice. |
+| **Vitamin D**      | Immunity, Bone Health | Supports immunity and calcium absorption; deficiency common in winter. | Avoid with certain heart medications (e.g., digoxin). |
+| **Lion’s Mane**    | Brain Health       | Promotes neurogenesis; popular in mushroom coffee (e.g., Chris Hemsworth’s Centr brand). | Limited data; caution with diabetes meds or anticoagulants. |
+
+*Sources: Glanbia Nutritionals, Vitaquest, VogueHK, 2025 market reports.*
+
+## Medication Interactions: Stay Safe
+Supplements can enhance wellness but may interact with medications, per FDA guidelines. For example:
+- **St. John’s Wort** (Mood & Mental Wellness): Can reduce efficacy of SSRIs, birth control, or blood thinners. Avoid combining without medical advice.
+- **Ginkgo Biloba** (Focus/Memory): May increase bleeding risk with warfarin or aspirin.
+- **Melatonin** (Sleep): Generally safe but may enhance sedative effects of benzodiazepines.
+
+**Tip**: Always consult a healthcare professional before starting supplements, especially if on medications. Third-party tested products (e.g., NSF, USP) ensure purity and dosage accuracy.
+
+## Why These Trends Matter
+The shift to self-care reflects a focus on prevention over treatment. Collagen’s rise ties to aging populations seeking skin and joint support, while Magnesium and Ashwagandha address Gen Z’s anxiety (70% report daily stress). Vitamin D remains a staple due to widespread deficiencies, and Lion’s Mane rides the wave of mushroom-based wellness. Non-pill formats like gummies make supplementation fun and accessible.
+
+## What’s Next?
+Next month, we’ll explore sports nutrition (e.g., Creatine’s 45.8% sales growth) and emerging botanicals like Cordyceps. Have a supplement you’re curious about? Let us know via the app’s feedback section!
+
+*Stay tuned for more at Supplement Spotlight!*
+`;
+
+    function App() {
+      const [data, setData] = useState(supplements);
+      const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+      const [currentSection, setCurrentSection] = useState(window.location.hash.replace('#', '') || 'home');
+      const [searchQuery, setSearchQuery] = useState('');
+      const [compareItems, setCompareItems] = useState([]);
+
+      useEffect(() => {
+        const handleHashChange = () => {
+          setCurrentSection(window.location.hash.replace('#', '') || 'home');
+        };
+        window.addEventListener('hashchange', handleHashChange);
+        handleHashChange();
+        return () => window.removeEventListener('hashchange', handleHashChange);
+      }, []);
+
+      const sortData = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+          direction = 'desc';
+        }
+        const sortedData = [...data].sort((a, b) => {
+          if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+          if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+          return 0;
+        });
+        setData(sortedData);
+        setSortConfig({ key, direction });
+      };
+
+      const handleSearch = (e) => {
+        const query = e.target.value.toLowerCase();
+        setSearchQuery(query);
+        if (query === '') {
+          setData(supplements);
+        } else {
+          const filteredData = supplements.filter(
+            (item) =>
+              item.Category.toLowerCase().includes(query) ||
+              item.Supplement.toLowerCase().includes(query) ||
+              item.Uses.toLowerCase().includes(query) ||
+              item.Tips.toLowerCase().includes(query)
+          );
+          setData(filteredData);
+        }
+      };
+
+      const handleCompare = (item) => {
+        if (compareItems.includes(item)) {
+          setCompareItems(compareItems.filter((i) => i.Supplement !== item.Supplement));
+        } else if (compareItems.length < 3) {
+          setCompareItems([...compareItems, item]);
+        } else {
+          alert('You can compare up to 3 supplements at a time.');
+        }
+      };
+
+      const renderSection = () => {
+        switch (currentSection) {
+          case 'home':
+            return (
+              <div>
+                <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded">
+                  Welcome to MySupplement
+                </h1>
+                <p className="text-lg mb-4">Your trusted guide to dietary supplements. Explore our comprehensive Cheat Sheet, search for supplements, compare benefits, and stay updated with the latest trends in our Supplement Spotlight.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">Why MySupplement?</h2>
+                    <ul className="list-disc pl-5">
+                      <li>Evidence-based information on supplements.</li>
+                      <li>Interactive tools to search and compare supplements.</li>
+                      <li>Monthly insights on trending supplements and safety tips.</li>
+                      <li>Trusted resources from NIH, FDA, and more.</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">Get Started</h2>
+                    <p>Navigate to the <a href="#cheat-sheet" className="text-blue-500 hover:underline">Cheat Sheet</a> to explore all supplements, use <a href="#search" className="text-blue-500 hover:underline">Search</a> to find specific ones, or check <a href="#blog" className="text-blue-500 hover:underline">Supplement Spotlight</a> for the latest trends.</p>
+                  </div>
+                </div>
+              </div>
+            );
+          case 'cheat-sheet':
+            return (
+              <div className="table-container">
+                <h1 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded">
+                  MySupplement Cheat Sheet
+                </h1>
+                <table className="min-w-full bg-white border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-200">
+                      {['Category', 'Supplement', 'Uses', 'Benefits', 'Effectiveness', 'Clinical', 'Safety', 'Tips'].map((header) => (
+                        <th
+                          key={header}
+                          className={`p-2 border-b cursor-pointer w-[${header === 'Tips' ? '300px' : header === 'Category' || header === 'Supplement' ? '200px' : header === 'Uses' || header === 'Benefits' ? '150px' : '120px'}] text-left`}
+                          onClick={() => sortData(header)}
+                        >
+                          <span className="sort-icon">{header}</span>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((row, index) => (
+                      <tr key={index} className="hover:bg-gray-100">
+                        <td className="p-2 border-b w-[200px]">{row.Category}</td>
+                        <td className="p-2 border-b w-[200px]">{row.Supplement}</td>
+                        <td className="p-2 border-b w-[150px]">{row.Uses}</td>
+                        <td className="p-2 border-b w-[150px]">{row.Benefits}</td>
+                        <td className="p-2 border-b w-[120px]">{row.Effectiveness}</td>
+                        <td className="p-2 border-b w-[120px]">{row.Clinical}</td>
+                        <td className="p-2 border-b w-[120px]">{row.Safety}</td>
+                        <td className="p-2 border-b w-[300px]">{row.Tips}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          case 'search':
+            return (
+              <div>
+                <h1 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded">
+                  Search Supplements
+                </h1>
+                <input
+                  type="text"
+                  placeholder="Search by Category, Supplement, Uses, or Tips..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="w-full p-2 mb-4 border border-gray-300 rounded"
+                />
+                <div className="table-container">
+                  <table className="min-w-full bg-white border border-gray-300">
+                    <thead>
+                      <tr className="bg-gray-200">
+                        {['Category', 'Supplement', 'Uses', 'Benefits', 'Effectiveness', 'Clinical', 'Safety', 'Tips'].map((header) => (
+                          <th
+                            key={header}
+                            className={`p-2 border-b cursor-pointer w-[${header === 'Tips' ? '300px' : header === 'Category' || header === 'Supplement' ? '200px' : header === 'Uses' || header === 'Benefits' ? '150px' : '120px'}] text-left`}
+                            onClick={() => sortData(header)}
+                          >
+                            <span className="sort-icon">{header}</span>
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((row, index) => (
+                        <tr key={index} className="hover:bg-gray-100">
+                          <td className="p-2 border-b w-[200px]">{row.Category}</td>
+                          <td className="p-2 border-b w-[200px]">{row.Supplement}</td>
+                          <td className="p-2 border-b w-[150px]">{row.Uses}</td>
+                          <td className="p-2 border-b w-[150px]">{row.Benefits}</td>
+                          <td className="p-2 border-b w-[120px]">{row.Effectiveness}</td>
+                          <td className="p-2 border-b w-[120px]">{row.Clinical}</td>
+                          <td className="p-2 border-b w-[120px]">{row.Safety}</td>
+                          <td className="p-2 border-b w-[300px]">{row.Tips}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          case 'compare':
+            return (
+              <div>
+                <h1 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded">
+                  Compare Supplements
+                </h1>
+                <div className="mb-4">
+                  <h2 className="text-lg font-semibold mb-2">Select Supplements to Compare (up to 3)</h2>
+                  <select
+                    onChange={(e) => handleCompare(supplements.find((item) => item.Supplement === e.target.value))}
+                    className="p-2 border border-gray-300 rounded"
+                  >
+                    <option value="">Select a supplement</option>
+                    {supplements.map((item) => (
+                      <option key={item.Supplement} value={item.Supplement}>
+                        {item.Supplement}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {compareItems.length > 0 && (
+                  <div className="table-container">
+                    <table className="min-w-full bg-white border border-gray-300">
+                      <thead>
+                        <tr className="bg-gray-200">
+                          {['Category', 'Supplement', 'Uses', 'Benefits', 'Effectiveness', 'Clinical', 'Safety', 'Tips'].map((header) => (
+                            <th
+                              key={header}
+                              className={`p-2 border-b w-[${header === 'Tips' ? '300px' : header === 'Category' || header === 'Supplement' ? '200px' : header === 'Uses' || header === 'Benefits' ? '150px' : '120px'}] text-left`}
+                            >
+                              {header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {compareItems.map((row, index) => (
+                          <tr key={index} className="hover:bg-gray-100">
+                            <td className="p-2 border-b w-[200px]">{row.Category}</td>
+                            <td className="p-2 border-b w-[200px]">{row.Supplement}</td>
+                            <td className="p-2 border-b w-[150px]">{row.Uses}</td>
+                            <td className="p-2 border-b w-[150px]">{row.Benefits}</td>
+                            <td className="p-2 border-b w-[120px]">{row.Effectiveness}</td>
+                            <td className="p-2 border-b w-[120px]">{row.Clinical}</td>
+                            <td className="p-2 border-b w-[120px]">{row.Safety}</td>
+                            <td className="p-2 border-b w-[300px]">{row.Tips}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            );
+          case 'features':
+            return (
+              <div>
+                <h1 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded">
+                  Features
+                </h1>
+                <ul className="list-disc pl-5">
+                  <li>Comprehensive Supplement Cheat Sheet with evidence-based entries, including Bone Health (Calcium, Vitamin D, Vitamin K2).</li>
+                  <li>Sortable table with expanded columns for easy reading and navigation.</li>
+                  <li>Monthly AI-driven Supplement Spotlight blog covering trending supplements and medication interactions.</li>
+                  <li>Search functionality to filter supplements by Category, Supplement, Uses, or Tips.</li>
+                  <li>Compare up to 3 supplements side-by-side to evaluate Benefits, Effectiveness, and Safety.</li>
+                  <li>Resources section linking to trusted sources like NIH and FDA for supplement safety.</li>
+                  <li>Mobile-responsive design with Tailwind CSS for seamless use on any device.</li>
+                </ul>
+              </div>
+            );
+          case 'resources':
+            return (
+              <div>
+                <h1 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded">
+                  Resources
+                </h1>
+                <p>Explore trusted sources for supplement information and safety:</p>
+                <ul className="list-disc pl-5">
+                  <li><a href="https://ods.od.nih.gov/" className="text-blue-500 hover:underline">NIH Office of Dietary Supplements</a> - Detailed fact sheets on vitamins, minerals, and herbs.</li>
+                  <li><a href="https://www.fda.gov/food/dietary-supplements" className="text-blue-500 hover:underline">FDA Dietary Supplements</a> - Regulations and safety information.</li>
+                  <li><a href="https://www.usp.org/verification-services/verified-mark" className="text-blue-500 hover:underline">USP Verified</a> - Third-party testing for supplement quality.</li>
+                  <li><a href="https://www.consumerlab.com/" className="text-blue-500 hover:underline">ConsumerLab</a> - Independent testing and reviews of supplements.</li>
+                </ul>
+              </div>
+            );
+          case 'disclaimer':
+            return (
+              <div>
+                <h1 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded">
+                  Disclaimer
+                </h1>
+                <p>The information provided by MySupplement is for educational purposes only and is not a substitute for professional medical advice. Always consult a healthcare professional before starting any supplement, especially if you are taking medications or have underlying health conditions. Supplement safety and interactions vary; refer to trusted sources like the NIH or FDA for guidance.</p>
+              </div>
+            );
+          case 'blog':
+            try {
+              const parsedBlog = window.marked ? window.marked.parse(blogPost) : blogPost;
+              console.log('Blog post parsed:', parsedBlog);
+              return (
+                <div className="markdown-content" dangerouslySetInnerHTML={{ __html: parsedBlog }} />
+              );
+            } catch (e) {
+              console.error('Error parsing blog post:', e);
+              return <div className="text-red-500">Error loading Supplement Spotlight. Please try again after deployment.</div>;
+            }
+          default:
+            return <div>Section not found</div>;
+        }
+      };
+
+      return (
+        <div>
+          {renderSection()}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

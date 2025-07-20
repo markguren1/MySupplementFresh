@@ -10,101 +10,21 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/marked@4.0.12/marked.min.js"></script>
   <style>
-    .sort-icon::after {
-      content: '↕';
-      margin-left: 4px;
-    }
-    .table-container {
-      max-width: 100%;
-      overflow-x: auto;
-    }
-    .markdown-content h1 {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-    .markdown-content h2 {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-    }
-    .markdown-content p {
-      margin-bottom: 1rem;
-    }
-    .markdown-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1rem;
-    }
-    .markdown-content th, .markdown-content td {
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      text-align: left;
-    }
-    .markdown-content th {
-      background-color: #f3f4f6;
-    }
-    .navbar-item {
-      position: relative;
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      color: #ffffff !important;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    .navbar-item:hover::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: #ffffff;
-    }
-    .navbar-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      background: linear-gradient(to right, blue, green);
-      padding: 10px;
-    }
-    .navbar-list {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .content {
-      padding: 20px;
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-    .slogan-box {
-      background: linear-gradient(to right, blue, green);
-      color: white;
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-      border-radius: 5px;
-    }
-    @media (max-width: 600px) {
-      .navbar-list {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .navbar-item {
-        width: 100%;
-        text-align: center;
-      }
-      .content {
-        padding: 10px;
-      }
-    }
+    .sort-icon::after { content: '↕'; margin-left: 4px; }
+    .table-container { max-width: 100%; overflow-x: auto; }
+    .markdown-content h1 { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; }
+    .markdown-content h2 { font-size: 1.25rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; }
+    .markdown-content p { margin-bottom: 1rem; }
+    .markdown-content table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    .markdown-content th, .markdown-content td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+    .markdown-content th { background-color: #f3f4f6; }
+    .navbar-item { position: relative; display: inline-block; padding: 0.5rem 1rem; color: #ffffff; font-size: 1rem; font-weight: 500; }
+    .navbar-item:hover::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: #ffffff; }
+    .navbar-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; width: 100%; max-width: 1200px; margin: 0 auto; background: linear-gradient(to right, blue, green); padding: 10px; }
+    .navbar-list { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .content { padding: 20px; max-width: 100%; overflow-x: hidden; }
+    .slogan-box { background: linear-gradient(to right, blue, green); color: white; text-align: center; padding: 10px; margin-top: 20px; border-radius: 5px; }
+    @media (max-width: 600px) { .navbar-list { flex-direction: column; align-items: center; gap: 0.5rem; } .navbar-item { width: 100%; text-align: center; } .content { padding: 10px; } }
   </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -119,7 +39,7 @@
       <li><a href="#disclaimer" class="navbar-item">Disclaimer</a></li>
       <li><a href="#cheat-sheet" class="navbar-item">Cheat Sheet</a></li>
       <li><a href="#spotlight" class="navbar-item">Supplement Spotlight</a></li>
-      <li><a href="#tips" class="navbar-item">Tips</a></li>
+      <li><a href="#notes" class="navbar-item">Notes</a></li>
       <li><a href="#contact" class="navbar-item">Contact</a></li>
     </ul>
   </nav>
@@ -175,61 +95,61 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>Melatonin</td><td>Insomnia/Jet Lag</td><td>Regulates sleep</td><td>🟢</td><td>🟢</td><td>🟢</td><td>1-3 mg before bed (NIH)</td></tr>
-        <tr><td>Magnesium</td><td>Sleep/Muscle</td><td>Improves sleep</td><td>🟡</td><td>🟡</td><td>🟢</td><td>200-400 mg, glycinate</td></tr>
-        <tr><td>Valerian Root</td><td>Sleep Onset</td><td>Faster sleep</td><td>🟡</td><td>🟡</td><td>🟡</td><td>300-600 mg, grogginess</td></tr>
-        <tr><td>L-Theanine</td><td>Relax/Sleep</td><td>Calms mind</td><td>🟡</td><td>🟡</td><td>🟢</td><td>100-200 mg with caffeine</td></tr>
-        <tr><td>CBD</td><td>Sleep/Anxiety</td><td>Aids anxious sleep</td><td>🔴</td><td>🔴</td><td>🟡</td><td>10-50 mg, safety unclear</td></tr>
-        <tr><td>Ashwagandha</td><td>Stress</td><td>Reduces cortisol</td><td>🟡</td><td>🟡</td><td>🟡</td><td>300-600 mg, lowers BP</td></tr>
-        <tr><td>Rhodiola Rosea</td><td>Burnout</td><td>Boosts resilience</td><td>🟡</td><td>🟡</td><td>🟡</td><td>200-400 mg, short-term</td></tr>
-        <tr><td>GABA</td><td>Calmness</td><td>Reduces anxiety</td><td>🔴</td><td>🔴</td><td>🟢</td><td>250-750 mg, poor absorption</td></tr>
-        <tr><td>Glucosamine</td><td>Joint Pain</td><td>Reduces pain</td><td>🟡</td><td>🟡</td><td>🟢</td><td>1500 mg with chondroitin</td></tr>
-        <tr><td>Turmeric/Curcumin</td><td>Inflammation</td><td>Anti-inflammatory</td><td>🟢</td><td>🟢</td><td>🟢</td><td>500-1000 mg with fat</td></tr>
-        <tr><td>Boswellia</td><td>Arthritis</td><td>Reduces swelling</td><td>🟡</td><td>🟡</td><td>🟡</td><td>300-500 mg, liver caution</td></tr>
-        <tr><td>Caffeine</td><td>Alertness</td><td>Boosts energy</td><td>🟢</td><td>🟢</td><td>🟡</td><td>100-200 mg, avoid late</td></tr>
-        <tr><td>CoQ10</td><td>Fatigue</td><td>Mitochondrial support</td><td>🟡</td><td>🟡</td><td>🟢</td><td>100-200 mg with statins</td></tr>
-        <tr><td>Vitamin B12</td><td>Fatigue</td><td>Energy if deficient</td><td>🟢</td><td>🟢</td><td>🟢</td><td>500-1000 mcg if needed</td></tr>
-        <tr><td>Bacopa Monnieri</td><td>Memory</td><td>Enhances retention</td><td>🟡</td><td>🟡</td><td>🟡</td><td>300-600 mg, 4-6 weeks</td></tr>
-        <tr><td>Citicoline</td><td>Focus</td><td>Boosts brain function</td><td>🟢</td><td>🟢</td><td>🟢</td><td>250-500 mg, stroke studies</td></tr>
-        <tr><td>Ginkgo Biloba</td><td>Memory</td><td>Improves blood flow</td><td>🔴</td><td>🔴</td><td>🟡</td><td>120-240 mg, blood thinner risk</td></tr>
-        <tr><td>Probiotics</td><td>Digestion</td><td>Improves gut flora</td><td>🟡</td><td>🟡</td><td>🟢</td><td>10-20 billion CFU, strain-specific</td></tr>
-        <tr><td>Prebiotics</td><td>Gut Support</td><td>Feeds bacteria</td><td>🟡</td><td>🟡</td><td>🟢</td><td>5-10 g, fiber-rich</td></tr>
-        <tr><td>Digestive Enzymes</td><td>Bloating</td><td>Breaks down food</td><td>🟡</td><td>🟡</td><td>🟢</td><td>1-2 capsules if deficient</td></tr>
-        <tr><td>L-Glutamine</td><td>Gut Lining</td><td>Aids repair</td><td>🟡</td><td>🟡</td><td>🟢</td><td>5-10 g, gut protocols</td></tr>
-        <tr><td>Vitamin C</td><td>Immunity</td><td>Antioxidant</td><td>🟡</td><td>🟡</td><td>🟢</td><td>500-1000 mg, food best</td></tr>
-        <tr><td>Zinc</td><td>Immunity</td><td>Supports cells</td><td>🟡</td><td>🟡</td><td>🟡</td><td>15-30 mg, excess nausea</td></tr>
-        <tr><td>Elderberry</td><td>Cold/Flu</td><td>Reduces duration</td><td>🟡</td><td>🟡</td><td>🟢</td><td>300-600 mg, early use</td></tr>
-        <tr><td>Vitamin D</td><td>Immunity</td><td>Modulates response</td><td>🟢</td><td>🟢</td><td>🟢</td><td>1000-4000 IU, winter</td></tr>
-        <tr><td>Omega-3 (DHA/EPA)</td><td>Brain Health</td><td>Supports cells</td><td>🟢</td><td>🟢</td><td>🟢</td><td>500-2000 mg, fish oil</td></tr>
-        <tr><td>Phosphatidylserine</td><td>Memory</td><td>Improves function</td><td>🟡</td><td>🟡</td><td>🟢</td><td>100-300 mg, aging</td></tr>
-        <tr><td>Lion’s Mane</td><td>Focus</td><td>Promotes growth</td><td>🟡</td><td>🟡</td><td>🟢</td><td>500-1000 mg, stacks</td></tr>
-        <tr><td>Omega-3</td><td>Heart Health</td><td>Reduces fats</td><td>🟢</td><td>🟢</td><td>🟢</td><td>1000-2000 mg, EPA+DHA</td></tr>
-        <tr><td>Magnesium</td><td>Heart Health</td><td>Vascular support</td><td>🟡</td><td>🟡</td><td>🟢</td><td>200-400 mg, citrate</td></tr>
-        <tr><td>Garlic Extract</td><td>Heart Health</td><td>Lowers BP</td><td>🟡</td><td>🟡</td><td>🟡</td><td>600-1200 mg, odorless</td></tr>
-        <tr><td>Green Tea Extract</td><td>Weight</td><td>Aids loss</td><td>🟡</td><td>🟡</td><td>🟡</td><td>250-500 mg, EGCG</td></tr>
-        <tr><td>Berberine</td><td>Weight</td><td>Insulin sensitivity</td><td>🟢</td><td>🟢</td><td>🟡</td><td>500-1500 mg, med caution</td></tr>
-        <tr><td>Fiber (Psyllium)</td><td>Weight</td><td>Supports fullness</td><td>🟢</td><td>🟢</td><td>🟢</td><td>5-10 g, water</td></tr>
-        <tr><td>NMN</td><td>Longevity</td><td>NAD+ support</td><td>🟡</td><td>🟡</td><td>🟡</td><td>250-500 mg, emerging</td></tr>
-        <tr><td>Resveratrol</td><td>Longevity</td><td>Calorie mimic</td><td>🟡</td><td>🟡</td><td>🟢</td><td>150-500 mg, grapes</td></tr>
-        <tr><td>Curcumin</td><td>Longevity</td><td>Reduces inflammation</td><td>🟢</td><td>🟢</td><td>🟢</td><td>500-1000 mg, piperine</td></tr>
-        <tr><td>Saw Palmetto</td><td>Men’s Health</td><td>Reduces BPH</td><td>🟡</td><td>🟡</td><td>🟢</td><td>160-320 mg, mild</td></tr>
-        <tr><td>Zinc</td><td>Men’s Health</td><td>Hormone balance</td><td>🟡</td><td>🟡</td><td>🟡</td><td>15-30 mg, limit</td></tr>
-        <tr><td>Maca Root</td><td>Men’s Health</td><td>Boosts libido</td><td>🟡</td><td>🟡</td><td>🟢</td><td>1.5-3 g, mixed evidence</td></tr>
-        <tr><td>Iron</td><td>Women’s Health</td><td>Oxygen transport</td><td>🟢</td><td>🟢</td><td>🟡</td><td>8-18 mg, monitor</td></tr>
-        <tr><td>Calcium</td><td>Women’s Health</td><td>Prevents bone loss</td><td>🟢</td><td>🟢</td><td>🟢</td><td>1000-1200 mg, split</td></tr>
-        <tr><td>Black Cohosh</td><td>Women’s Health</td><td>Reduces hot flashes</td><td>🟡</td><td>🟡</td><td>🟡</td><td>20-40 mg, short term</td></tr>
-        <tr><td>Collagen Peptides</td><td>Skin Health</td><td>Skin elasticity</td><td>🟡</td><td>🟡</td><td>🟢</td><td>5-10 g, hydrolyzed</td></tr>
-        <tr><td>Biotin</td><td>Skin Health</td><td>Keratin support</td><td>🔴</td><td>🔴</td><td>🟢</td><td>30-100 mcg, if deficient</td></tr>
-        <tr><td>Hyaluronic Acid</td><td>Skin Health</td><td>Skin moisture</td><td>🟡</td><td>🟡</td><td>🟢</td><td>120-240 mg, with collagen</td></tr>
-        <tr><td>5-HTP</td><td>Mood Support</td><td>Serotonin precursor</td><td>🟡</td><td>🟡</td><td>🟡</td><td>50-300 mg, no SSRIs</td></tr>
-        <tr><td>SAM-e</td><td>Mood Support</td><td>Neurotransmitter aid</td><td>🟡</td><td>🟡</td><td>🟡</td><td>200-400 mg, empty stomach</td></tr>
-        <tr><td>St. John’s Wort</td><td>Mood Support</td><td>Mild depression aid</td><td>🟢</td><td>🟢</td><td>🔴</td><td>300-900 mg, med interactions</td></tr>
-        <tr><td>Inositol</td><td>Hormonal Health</td><td>Insulin/mood support</td><td>🟢</td><td>🟢</td><td>🟢</td><td>2-4 g, PCOS</td></tr>
-        <tr><td>DHEA</td><td>Hormonal Health</td><td>Energy/hormone aid</td><td>🟡</td><td>🟡</td><td>🟡</td><td>25-50 mg, consult doctor</td></tr>
-        <tr><td>Milk Thistle</td><td>Liver Health</td><td>Protects liver</td><td>🟡</td><td>🟡</td><td>🟢</td><td>140-800 mg, liver stress</td></tr>
-        <tr><td>NAC</td><td>Liver Health</td><td>Boosts glutathione</td><td>🟢</td><td>🟢</td><td>🟢</td><td>600-1200 mg, mental health</td></tr>
-        <tr><td>Creatine Monohydrate</td><td>Muscle Performance</td><td>Enhances strength</td><td>🟢</td><td>🟢</td><td>🟢</td><td>3-5 g, training</td></tr>
-        <tr><td>Lutein/Zeaxanthin</td><td>Eye Health</td><td>Protects retina</td><td>🟢</td><td>🟢</td><td>🟢</td><td>10-20 mg, eye health</td></tr>
+        <tr><td>Melatonin</td><td>Insomnia/Jet Lag</td><td>Regulates sleep</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Best for short-term use</td></tr>
+        <tr><td>Magnesium</td><td>Sleep/Muscle Relax</td><td>Improves sleep quality</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Glycinate form preferred</td></tr>
+        <tr><td>Valerian Root</td><td>Sleep Onset</td><td>Helps fall asleep faster</td><td>🟡</td><td>🟡</td><td>🟡</td><td>May cause grogginess</td></tr>
+        <tr><td>L-Theanine</td><td>Relaxation/Sleep</td><td>Calms without sedation</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Often paired with caffeine</td></tr>
+        <tr><td>CBD</td><td>Sleep/Anxiety</td><td>Aids sleep in anxiety cases</td><td>🔴</td><td>🔴</td><td>🟡</td><td>Long-term safety unclear</td></tr>
+        <tr><td>Ashwagandha</td><td>Stress/Cortisol</td><td>Reduces stress response</td><td>🟡</td><td>🟡</td><td>🟡</td><td>May lower blood pressure</td></tr>
+        <tr><td>Rhodiola Rosea</td><td>Burnout/Fatigue</td><td>Supports resilience</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Best for short-term use</td></tr>
+        <tr><td>GABA</td><td>Calmness</td><td>Reduces anxious thoughts</td><td>🔴</td><td>🔴</td><td>🟢</td><td>Oral absorption is poor</td></tr>
+        <tr><td>Glucosamine</td><td>Arthritis/Joint Pain</td><td>Reduces pain over time</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Often with chondroitin</td></tr>
+        <tr><td>Turmeric/Curcumin</td><td>Inflammation/Pain</td><td>Anti-inflammatory</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Take with fat for absorption</td></tr>
+        <tr><td>Boswellia</td><td>Arthritis/Inflammation</td><td>Reduces joint swelling</td><td>🟡</td><td>🟡</td><td>🟡</td><td>May affect liver enzymes</td></tr>
+        <tr><td>Caffeine</td><td>Alertness/Fatigue</td><td>Boosts energy short-term</td><td>🟢</td><td>🟢</td><td>🟡</td><td>Can disrupt sleep or raise BP</td></tr>
+        <tr><td>CoQ10</td><td>Fatigue/Statin Use</td><td>Supports mitochondrial function</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Often used with statins</td></tr>
+        <tr><td>Vitamin B12</td><td>Fatigue/Deficiency</td><td>Boosts energy if deficient</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Ineffective if B12 normal</td></tr>
+        <tr><td>Bacopa Monnieri</td><td>Memory/Cognitive Load</td><td>Improves memory retention</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Takes 4–6 weeks for effect</td></tr>
+        <tr><td>Citicoline</td><td>Cognitive Support</td><td>Supports focus/brain function</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Studied in stroke patients</td></tr>
+        <tr><td>Ginkgo Biloba</td><td>Memory/Circulation</td><td>Improves brain blood flow</td><td>🔴</td><td>🔴</td><td>🟡</td><td>Interacts with blood thinners</td></tr>
+        <tr><td>Probiotics</td><td>Digestion/IBS</td><td>Improves gut flora</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Choose strain-specific types</td></tr>
+        <tr><td>Prebiotics</td><td>Gut Flora Support</td><td>Feeds beneficial bacteria</td><td>🟡</td><td>🟡</td><td>🟢</td><td>In fiber-rich foods</td></tr>
+        <tr><td>Digestive Enzymes</td><td>Bloating/Indigestion</td><td>Breaks down food</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Useful if enzyme deficient</td></tr>
+        <tr><td>L-Glutamine</td><td>Gut Lining/IBS</td><td>Aids intestinal repair</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Common in gut protocols</td></tr>
+        <tr><td>Vitamin C</td><td>Colds/Immunity</td><td>Antioxidant/immune support</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Best from food sources</td></tr>
+        <tr><td>Zinc</td><td>Colds/Immunity</td><td>Supports immune cells</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Excess can cause nausea</td></tr>
+        <tr><td>Elderberry</td><td>Cold/Flu Symptoms</td><td>Reduces cold duration</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Best taken early</td></tr>
+        <tr><td>Vitamin D</td><td>Respiratory Immunity</td><td>Modulates immune response</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Deficiency common in winter</td></tr>
+        <tr><td>Omega-3 (DHA/EPA)</td><td>Cognition/Brain Aging</td><td>Supports brain cell health</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Best from fish oil/algae</td></tr>
+        <tr><td>Phosphatidylserine</td><td>Memory/Focus</td><td>Improves cognitive function</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Well tolerated, aging support</td></tr>
+        <tr><td>Lion’s Mane</td><td>Neurogenesis/Focus</td><td>Promotes nerve growth</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Popular in nootropic stacks</td></tr>
+        <tr><td>Omega-3</td><td>Cholesterol/Triglycerides</td><td>Reduces inflammation/fats</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Look for EPA + DHA combo</td></tr>
+        <tr><td>Magnesium</td><td>Blood Pressure</td><td>Supports vascular function</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Citrate/glycinate best</td></tr>
+        <tr><td>Garlic Extract</td><td>Cholesterol/BP</td><td>Lowers BP slightly</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Odorless options available</td></tr>
+        <tr><td>Green Tea Extract</td><td>Fat Oxidation</td><td>Aids weight loss slightly</td><td>🟡</td><td>🟡</td><td>🟡</td><td>EGCG is active component</td></tr>
+        <tr><td>Berberine</td><td>Blood Sugar/Fat Metabolism</td><td>Improves insulin sensitivity</td><td>🟢</td><td>🟢</td><td>🟡</td><td>Can interact with meds</td></tr>
+        <tr><td>Fiber (Psyllium)</td><td>Satiety/Glucose Control</td><td>Supports fullness</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Drink plenty of water</td></tr>
+        <tr><td>NMN</td><td>Cellular Aging</td><td>Supports NAD+ production</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Human evidence emerging</td></tr>
+        <tr><td>Resveratrol</td><td>Oxidative Stress</td><td>Mimics calorie restriction</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Found in red wine/grapes</td></tr>
+        <tr><td>Curcumin</td><td>Inflammation/Aging</td><td>Reduces chronic inflammation</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Best with piperine</td></tr>
+        <tr><td>Saw Palmetto</td><td>Prostate Health</td><td>Reduces BPH symptoms</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Best for mild BPH</td></tr>
+        <tr><td>Zinc</td><td>Testosterone/Fertility</td><td>Supports hormone balance</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Don’t exceed upper limit</td></tr>
+        <tr><td>Maca Root</td><td>Libido/Mood</td><td>Improves energy/libido</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Evidence is mixed</td></tr>
+        <tr><td>Iron</td><td>Anemia/Fatigue</td><td>Supports oxygen transport</td><td>🟢</td><td>🟢</td><td>🟡</td><td>Monitor levels before use</td></tr>
+        <tr><td>Calcium</td><td>Bone Health</td><td>Prevents bone loss</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Split doses for absorption</td></tr>
+        <tr><td>Black Cohosh</td><td>Menopause Symptoms</td><td>Reduces hot flashes</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Use short term only</td></tr>
+        <tr><td>Collagen Peptides</td><td>Skin/Hair/Nails</td><td>Supports skin elasticity</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Hydrolyzed form is best</td></tr>
+        <tr><td>Biotin</td><td>Hair/Nails</td><td>Supports keratin production</td><td>🔴</td><td>🔴</td><td>🟢</td><td>Only useful if deficient</td></tr>
+        <tr><td>Hyaluronic Acid</td><td>Skin Hydration</td><td>Improves skin moisture</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Often with collagen</td></tr>
+        <tr><td>5-HTP</td><td>Low Mood/Sleep</td><td>Precursor to serotonin</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Don’t combine with SSRIs</td></tr>
+        <tr><td>SAM-e</td><td>Depression/Mood</td><td>Supports neurotransmitter balance</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Take on empty stomach</td></tr>
+        <tr><td>St. John’s Wort</td><td>Mild Depression</td><td>Comparable to SSRI</td><td>🟢</td><td>🟢</td><td>🔴</td><td>Major med interactions</td></tr>
+        <tr><td>Inositol</td><td>PCOS/Mood</td><td>Improves insulin/mood</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Best for PCOS/fertility</td></tr>
+        <tr><td>DHEA</td><td>Hormone Balance/Libido</td><td>Supports energy/hormones</td><td>🟡</td><td>🟡</td><td>🟡</td><td>Consult doctor; avoid in cancer</td></tr>
+        <tr><td>Milk Thistle</td><td>Liver Support</td><td>Protects liver cells</td><td>🟡</td><td>🟡</td><td>🟢</td><td>Best for liver stress</td></tr>
+        <tr><td>NAC</td><td>Liver Detox/Antioxidant</td><td>Boosts glutathione</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Supports mental health</td></tr>
+        <tr><td>Creatine Monohydrate</td><td>Muscle Strength</td><td>Enhances performance</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Best for resistance training</td></tr>
+        <tr><td>Lutein/Zeaxanthin</td><td>Eye Health</td><td>Protects retina</td><td>🟢</td><td>🟢</td><td>🟢</td><td>Eye health support</td></tr>
       </tbody>
     </table>
     <div class="slogan-box">AI Engineered, Human Inspired!</div>
@@ -241,19 +161,19 @@
     <div class="slogan-box">AI Engineered, Human Inspired!</div>
   </div>
 
-  <div class="content container" id="tips">
-    <h2>Tips 🛡️</h2>
+  <div class="content container" id="notes">
+    <h2>Notes 📝</h2>
     <p><strong>Sleep Checklist 🌙</strong></p>
     <ul class="list-disc pl-5">
-      <li>Take Magnesium with dinner to relax muscles (200-400 mg, glycinate preferred).</li>
-      <li>Try Melatonin 1-3 mg 30 minutes before bed for short-term use (NIH).</li>
-      <li>Use Valerian Root 300-600 mg if needed, but watch for grogginess.</li>
-      <li>Pair L-Theanine 100-200 mg with caffeine for calm focus.</li>
+      <li>Take Magnesium with dinner to relax muscles.</li>
+      <li>Try Melatonin before bed for short-term use.</li>
+      <li>Use Valerian Root if needed, but watch for grogginess.</li>
+      <li>Pair L-Theanine with caffeine for calm focus.</li>
     </ul>
     <p><strong>Joint Health 💪</strong></p>
     <ul class="list-disc pl-5">
-      <li>Combine Glucosamine 1500 mg with Chondroitin for arthritis relief.</li>
-      <li>Take Turmeric 500-1000 mg with a meal containing fat for absorption.</li>
+      <li>Combine Glucosamine with Chondroitin for arthritis relief.</li>
+      <li>Take Turmeric with a meal containing fat for absorption.</li>
     </ul>
     <div class="slogan-box">AI Engineered, Human Inspired!</div>
   </div>
